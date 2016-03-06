@@ -14,7 +14,7 @@ namespace FontAwesome
         {
             var input = File.ReadAllText("font-awesome.css");
 
-            string pattern = @"(?:\.fa-([a-z]+):before,\s*)*\.fa-([a-z]+):before {\s*content: ""\\([0-9a-f]+)"";\s*}";
+            string pattern = @"(?:\.fa-([a-z\-]+):before,\s*)*\.fa-([a-z\-]+):before {\s*content: ""\\([0-9a-f]+)"";\s*}";
 
 
             Regex rgx = new Regex(pattern);
