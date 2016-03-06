@@ -14,26 +14,21 @@ namespace FontAwesome
         {
             var input = File.ReadAllText("font-awesome.css");
 
-            string pattern = @"(?:\.fa-([a-z\-]+):before,\s*)*\.fa-([a-z\-]+):before {\s*content: ""\\([0-9a-f]+)"";\s*}";
-
-
+            string pattern = @"(?:\.fa-([a-z0-9-]+):before,?\s*)+{\s*content:\s*""\\([0-9a-f]+)"";\s*}";
             Regex rgx = new Regex(pattern);
-            MatchCollection matches = rgx.Matches(input);
 
+            MatchCollection matches = rgx.Matches(input);
             foreach (Match match in matches)
             {
-                // gather names; first group is whole match; last is value
-                List<string> names = new List<string>();
-                for (int i = 1; i < match.Groups.Count - 1; i++)
-                {
-                    foreach (var capt in match.Groups[i].Captures)
-                    {
-                        names.Add(capt.ToString());
-                    }
-                }
+                // first group (0) is whole match
+                int namesGroup = 1;
+                int valueGroup = 2;
+
+                // gather names
+                List<string> names = match.Groups[namesGroup].Captures.Cast<Capture>().Select(c => c.Value).ToList();
 
                 // gather value
-                string value = match.Groups[match.Groups.Count - 1].Value;
+                string value = match.Groups[valueGroup].Value;
 
                 // process data
                 foreach (var n in names)
@@ -44,7 +39,6 @@ namespace FontAwesome
             }
 
             Console.ReadKey();
-
         }
     }
 }
